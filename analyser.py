@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
 class Analyser:
-    def __init__(self, path="hair_dryer.tsv"):
+    def __init__(self, path="data/hair_dryer.tsv"):
         # read raw data
         self.raw_df = pd.read_csv(path, sep='\t')
 
