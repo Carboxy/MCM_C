@@ -1,7 +1,6 @@
 import pandas as pd
 from gensim.test.utils import datapath
 from gensim import corpora, models, similarities
-import json
 import numpy as np
 import os
 from lda_util import clean_tsv
@@ -11,9 +10,6 @@ MODEL_DIR = os.path.join(ROOT_DIR, "model")
 
 #print(lda.print_topics(num_topics=20, num_words=20))
 
-def load_json(json_dir):
-    with open(json_dir, 'r') as f:
-        return json.load(f)
 
 def lda_sim(doc1,doc2, lda, topic_num=20):
     doc1_lda = lda[doc1]
