@@ -6,10 +6,11 @@ from nltk.tokenize import RegexpTokenizer
 from stop_words import get_stop_words
 from nltk.stem.porter import PorterStemmer
 from gensim import corpora, models
+from gensim.test.utils import datapath
 
 
 # load reviews
-df = pd.read_csv("data/hair_dryer.tsv", sep='\t')
+df = pd.read_csv("data/hair_dryer.tsv", sep='\t', encoding="utf-8")
 reviews = df["review_body"].tolist()
 
 # tokenize
@@ -34,4 +35,11 @@ texts_list = []
 
 for stopped_tokens in stopped_tokens_list:
     texts = [p_stemmer.stem(stopped_token) for stopped_token in stopped_tokens]
-    texts_list.append(text)
+    texts_list.append(texts)
+
+dictionary = corpora.Dictionary(texts_list)
+corpus = [dictionary.doc2bow(texts) for texts in texts_list]
+ldamodel = models.ldamodel.LdaModel(corpus, num_topics=20, id2word = dictionary, passes=20) 
+temp_file = datapath("model")
+ldamodel.save(temp_file)
+
