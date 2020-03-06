@@ -18,6 +18,7 @@ reviews = df["review_body"].tolist()
 tokens_list = []
 
 for review in reviews:
+    review = review.replace("<br />", " ")
     tokens = nltk.word_tokenize(re.sub('[^\w ]', '', review))
     tokens_list.append(tokens)
 
@@ -40,6 +41,6 @@ for stopped_tokens in stopped_tokens_list:
 dictionary = corpora.Dictionary(texts_list)
 corpus = [dictionary.doc2bow(texts) for texts in texts_list]
 ldamodel = models.ldamodel.LdaModel(corpus, num_topics=20, id2word = dictionary, passes=20) 
-temp_file = datapath("model")
+temp_file = datapath("model/lda_model")
 ldamodel.save(temp_file)
 
