@@ -8,7 +8,10 @@ from stop_words import get_stop_words
 from nltk.stem.porter import PorterStemmer
 from gensim import corpora, models
 from gensim.test.utils import datapath
+import os
 
+ROOT_DIR = os.path.abspath("")
+MODEL_DIR = os.path.join(ROOT_DIR, "model")
 
 # load reviews
 df = pd.read_csv("data/hair_dryer.tsv", sep='\t', encoding="utf-8")
@@ -19,6 +22,7 @@ tokens_list = []
 
 for review in reviews:
     review = review.replace("<br />", " ")
+    review = review.lower()
     tokens = nltk.word_tokenize(re.sub('[^\w ]', '', review))
     tokens_list.append(tokens)
 
@@ -41,6 +45,6 @@ for stopped_tokens in stopped_tokens_list:
 dictionary = corpora.Dictionary(texts_list)
 corpus = [dictionary.doc2bow(texts) for texts in texts_list]
 ldamodel = models.ldamodel.LdaModel(corpus, num_topics=20, id2word = dictionary, passes=20) 
-temp_file = datapath("model/lda_model")
+temp_file = datapath(os.path.join(MODEL_DIR, "lda_model"))
 ldamodel.save(temp_file)
 
