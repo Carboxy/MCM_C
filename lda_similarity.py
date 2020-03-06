@@ -53,21 +53,20 @@ class lda_sim:
         self.index = similarities.Similarity.load(index_dir)
         self.dictionary = corpora.Dictionary.load(dict_dir)
         self.texts_list = load_json(texts_list_dir)
-        #self.corpus = [self.dictionary.doc2bow(texts) for texts in self.texts_list]
-        self.corpus = get_corpus()
+        self.corpus = [self.dictionary.doc2bow(texts) for texts in self.texts_list]
+        #self.corpus = get_corpus()
 
-    def get_lda_sim(self, ref_dir, topN=5):
+    def get_lda_sim(self, ref_idxs, topN=20):
         '''
         对于一系列给定的参考评价，搜索所有评价中与参考评价相似度最高的topN条，返回
         索引和相似度
         Args:
             ref_dir: 参考评价的路径
         '''
-        refs = load_json(ref_dir)
         sim_sum = np.zeros(len(self.corpus))
         count = 0
-        for ref in refs:
-            ref_bow = self.dictionary.doc2bow(ref, allow_update=False)
+        for ref_idx in ref_idxs:
+            ref_bow = self.corpus[ref_idx]
             try:
                 sim_sum += self.index[self.model[ref_bow]]
                 count += 1
@@ -79,12 +78,14 @@ class lda_sim:
 
 
 if __name__ == '__main__':
-    model_dir = 'model/lda/lda_model'
-    index_dir = 'model/lda/sim.index'
-    dict_dir = 'model/lda/lda.dict'
+    model_dir = 'model/lda/lda1.model'
+    index_dir = 'model/lda/lda1.index'
+    dict_dir = 'model/lda/lda1.dict'
     texts_list_dir = 'data_cleaned/hair_dryer_cleaned.json'
     ref_dir = 'reference_review/good.json'
+    good_idx = [11383, 11384, 11398, 11429, 11442, 11448, 11463, 11468, 11469]
+    bad_idx = [0, 20, 1252, 1296, 4796, 5618, 6134, 6844, 8084, 8130]
     lda_sim = lda_sim(model_dir, index_dir, dict_dir, texts_list_dir)
-    score, ind = lda_sim.get_lda_sim(ref_dir,5) 
+    score, ind = lda_sim.get_lda_sim(bad_idx, 20)
     print(score)
     print(ind)  
