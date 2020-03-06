@@ -3,8 +3,8 @@ from gensim.test.utils import datapath
 from gensim import corpora, models, similarities
 import json
 import numpy as np
-from lda_util import clean_tsv
 import os
+from lda_util import clean_tsv
 
 ROOT_DIR = os.path.abspath("")
 MODEL_DIR = os.path.join(ROOT_DIR, "model")
@@ -35,9 +35,10 @@ def lda_sim(doc1,doc2, lda, topic_num=20):
 if __name__ == '__main__':
     fname = datapath(os.path.join(MODEL_DIR, "lda_model"))
     lda = models.ldamodel.LdaModel.load(fname, mmap='r')
-    texts_list = load_json('data_cleaned/hair_dryer_cleaned.json')
+    texts_list = clean_tsv("data/hair_dryer.tsv")
 
     dictionary = corpora.Dictionary(texts_list)
     corpus = [dictionary.doc2bow(texts) for texts in texts_list]
-    sim = lda_sim(corpus[1],corpus[18],lda)
-    print(sim)
+    index = similarities.MatrixSimilarity(lda[corpus])
+    index.save(os.path.join(MODEL_DIR, "sim.index"))
+    

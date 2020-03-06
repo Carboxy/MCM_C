@@ -46,11 +46,12 @@ def clean_tsv(path):
 
     return texts_list
 
-texts_list = clean_tsv("data/hair_dryer.tsv")
+if __name__ == "__main__":
+    texts_list = clean_tsv("data/hair_dryer.tsv")
 
-dictionary = corpora.Dictionary(texts_list)
-corpus = [dictionary.doc2bow(texts) for texts in texts_list]
-ldamodel = models.ldamodel.LdaModel(corpus, num_topics=20, id2word = dictionary, passes=20) 
-temp_file = datapath(os.path.join(MODEL_DIR, "lda_model"))
-ldamodel.save(temp_file)
+    dictionary = corpora.Dictionary(texts_list)
+    corpus = [dictionary.doc2bow(texts) for texts in texts_list]
+    ldamodel = models.ldamodel.LdaModel(corpus, num_topics=20, id2word = dictionary, passes=20) 
+    temp_file = datapath(os.path.join(MODEL_DIR, "lda_model"))
+    ldamodel.save(temp_file)
 
