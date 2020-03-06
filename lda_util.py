@@ -2,7 +2,8 @@
 # https://blog.csdn.net/github_36299736/article/details/54966460
 
 import pandas as pd
-from nltk.tokenize import RegexpTokenizer
+import nltk
+import re
 from stop_words import get_stop_words
 from nltk.stem.porter import PorterStemmer
 from gensim import corpora, models
@@ -14,11 +15,10 @@ df = pd.read_csv("data/hair_dryer.tsv", sep='\t', encoding="utf-8")
 reviews = df["review_body"].tolist()
 
 # tokenize
-tokenizer = RegexpTokenizer(r'\w+')
 tokens_list = []
 
 for review in reviews:
-    tokens = tokenizer.tokenize(review)
+    tokens = nltk.word_tokenize(re.sub('[^\w ]', '', review))
     tokens_list.append(tokens)
 
 # delete stop words
