@@ -19,3 +19,6 @@ d = {"good": ["I have wavy hair that can be coaxed into curls or dried straight.
         "no warm setting can't 'use",
         "I made this order. after i got it, i found out it wasn't working. i plugged it & it refused to come on. it was a pure waste of my money because what's the point if i can't use it. i should have gotten something better or more mature. Now i regret buying it."]
 }
+
+d_index = {"good": [11383, 11469, 11456, 6424, 5843, 5797, 4431, 3423, 2519, 1570], \
+           "bad": [0, 20, 1252, 1296, 4796, 5618, 6134, 6844, 8084, 8130]}
