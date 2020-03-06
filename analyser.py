@@ -14,8 +14,7 @@ class Analyser:
             try:
                 df = df.groupby("product_parent").get_group(product_parent)
             except KeyError:
-                print("Unexisted product_parent!")
-                return None
+                raise ("Unexisted product_parent!")
         return df
 
     def average_rating(self):
@@ -30,9 +29,6 @@ class Analyser:
         y_axis = [0, 0, 0, 0, 0]
 
         df = self._get_product(product_parent)
-
-        if df is None:
-            return
 
         star_rating = df["star_rating"].tolist()
 
@@ -54,9 +50,6 @@ class Analyser:
         '''
 
         df = self._get_product(product_parent)
-
-        if df is None:
-            return
 
         total_voting = df["total_votes"].tolist()
         res = {}
@@ -85,9 +78,6 @@ class Analyser:
 
         df = self._get_product(product_parent)
 
-        if df is None:
-            return
-
         total_voting = df["total_votes"].tolist()
         helpful_voting = df["helpful_votes"].tolist()
 
@@ -113,9 +103,6 @@ class Analyser:
             If product_parent = 0, it will draw the global word cloud
         '''
         df = self._get_product(product_parent)
-
-        if df is None:
-            return
 
         review = df["review_body"].tolist()
         text = ""
