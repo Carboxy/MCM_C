@@ -13,34 +13,40 @@ import os
 ROOT_DIR = os.path.abspath("")
 MODEL_DIR = os.path.join(ROOT_DIR, "model")
 
-# load reviews
-df = pd.read_csv("data/hair_dryer.tsv", sep='\t', encoding="utf-8")
-reviews = df["review_body"].tolist()
+def clean_tsv(path):
+    print('Cleaning...')
+    # load reviews
+    df = pd.read_csv("data/hair_dryer.tsv", sep='\t', encoding="utf-8")
+    reviews = df["review_body"].tolist()
 
-# tokenize
-tokens_list = []
+    # tokenize
+    tokens_list = []
 
-for review in reviews:
-    review = review.replace("<br />", " ")
-    review = review.lower()
-    tokens = nltk.word_tokenize(re.sub('[^\w ]', '', review))
-    tokens_list.append(tokens)
+    for review in reviews:
+        review = review.replace("<br />", " ")
+        review = review.lower()
+        tokens = nltk.word_tokenize(re.sub('[^\w ]', '', review))
+        tokens_list.append(tokens)
 
-# delete stop words
-en_stop = get_stop_words('en')
-stopped_tokens_list = []
+    # delete stop words
+    en_stop = get_stop_words('en')
+    stopped_tokens_list = []
 
-for tokens in tokens_list:
-    stopped_tokens = [token for token in tokens if not token in en_stop]
-    stopped_tokens_list.append(stopped_tokens)
+    for tokens in tokens_list:
+        stopped_tokens = [token for token in tokens if not token in en_stop]
+        stopped_tokens_list.append(stopped_tokens)
 
-# extract stem
-p_stemmer = PorterStemmer()
-texts_list = []
+    # extract stem
+    p_stemmer = PorterStemmer()
+    texts_list = []
 
-for stopped_tokens in stopped_tokens_list:
-    texts = [p_stemmer.stem(stopped_token) for stopped_token in stopped_tokens]
-    texts_list.append(texts)
+    for stopped_tokens in stopped_tokens_list:
+        texts = [p_stemmer.stem(stopped_token) for stopped_token in stopped_tokens]
+        texts_list.append(texts)
+
+    return texts_list
+
+texts_list = clean_tsv("data/hair_dryer.tsv")
 
 dictionary = corpora.Dictionary(texts_list)
 corpus = [dictionary.doc2bow(texts) for texts in texts_list]
