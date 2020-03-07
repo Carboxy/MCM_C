@@ -41,3 +41,10 @@ $l \in N^+$
 $l \leq 10, value = 0.5l$
 $10 < l < 20, value = 10l - 100$
 $l \geq 20, value = 100$
+
+
+
+商品的总声誉(reputation)视为其下所有评论的加权和，
+其中权值为以上过程中得出的score，而单条评论得出的声誉由其打分以及评论内容构成
+$total\_reputation = \sum^n_{i=1}score_i \times reputation_i$
+我先在未得到文本对单独声誉的影响下只用rate的星值尝试计算时间随总声誉的变化情况
