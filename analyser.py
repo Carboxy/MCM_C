@@ -129,8 +129,11 @@ class Analyser:
         plt.axis("off")
         plt.show()
         
-    
+    def generate_high_helpful_vote_submatrix(self, data_path="scoreboard/hair_dryer_score.csv", save_path="meaningful_review/hair_dryer_meaningful_review.csv"):
+        df = pd.read_csv(data_path)
+        df = df[df['helpful_votes'] >= 10]
+        df.to_csv(save_path)
 
 if __name__ == "__main__":
     ana = Analyser()
-    ana.score_distribution()
+    ana.generate_high_helpful_vote_submatrix("scoreboard/pacifier_score.csv", "meaningful_review/pacifier_meaningful_review.csv")
