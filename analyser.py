@@ -95,7 +95,19 @@ class Analyser:
         plt.hist(data, bins=40)
         plt.show()
 
+    def score_distribution(self, path="scoreboard/hair_dryer_score.csv"):
+        '''
+            ### Draw the picture of score distribution of given score file
+        '''
 
+        df = pd.read_csv(path)
+        scores = df["score"].tolist()
+
+        plt.title("Score Distribution")
+        plt.xlabel("Score")
+        plt.ylabel("Number")
+        plt.hist(scores, bins=10)
+        plt.show()
 
     def generate_word_cloud(self, product_parent=0):
         '''
@@ -121,4 +133,4 @@ class Analyser:
 
 if __name__ == "__main__":
     ana = Analyser()
-    ana.helpful_voting_ratio_distribution(0, 5)
+    ana.score_distribution()
