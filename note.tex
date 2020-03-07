@@ -1,0 +1,43 @@
+
+
+
+事实：
+vine直接决定评论很有价值
+在高基数的helpful_vote_ratio直接决定价值
+verified purchase在非vine用户且为N时认为较无价值（vine用户大多为N）
+评论头为默认时大多无价值
+评论内容太短大多无价值
+
+If $vine = Y$, total_value仅与helpful_vote_ratio相关（默认其评论是好的但有可能不受大众认可）
+$total\_value = 80 + \dfrac{value_{hvr}}{5} \in [80, 100]$
+
+If $vine = N$, 考虑另外4项，其中认为$value_{hvr}$为决定性分数，其余作为辅助
+默认评论头总价值乘0.1，vp = N总价值乘0.5，否则乘1
+$total\_value = value_{hvr} \times default\_header \times verified\_purchase \times \dfrac{value_{body}}{100} $
+
+
+$helpful\_vote\_ratio$
+$vine$
+$verified\_purchase$
+$review\_head$
+$review\_body$
+
+helpful_votes以及total_votes事实：
+0/0为未知价值，但基于无人投票的事实，应认为它的平均实际价值应当略微偏低？
+n/m中，若m基数大，可直接将比例值作为价值的正比例参数，若m基数小，
+基数越小，则比例带给价值的影响就小
+
+若打分范围为0-100，基数以5为基准
+$m = 0, value = 40$
+$0 < m < 5, value = 50 + (\dfrac{n}{m} - 0.5) \times 20m$
+$m \geq 5, value = 100 * \dfrac{n}{m}$
+
+
+review_body长度对价值的影响事实：
+经过数据的观察，若长度小于10可基本认为无价值
+长度大于20可认为其有价值，不被该项影响
+打分范围为0-100
+$l \in N^+$
+$l \leq 10, value = 0.5l$
+$10 < l < 20, value = 10l - 100$
+$l \geq 20, value = 100$

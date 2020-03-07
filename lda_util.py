@@ -13,6 +13,13 @@ import os
 ROOT_DIR = os.path.abspath("")
 MODEL_DIR = os.path.join(ROOT_DIR, "model")
 
+def clean_review(review):
+    review = review.replace("<br />", " ")
+    review = review.lower()
+    tokens = nltk.word_tokenize(re.sub('[^\w ]', '', review))
+    return tokens
+
+
 def clean_tsv(path):
     print('Cleaning...')
     # load reviews
@@ -23,9 +30,7 @@ def clean_tsv(path):
     tokens_list = []
 
     for review in reviews:
-        review = review.replace("<br />", " ")
-        review = review.lower()
-        tokens = nltk.word_tokenize(re.sub('[^\w ]', '', review))
+        tokens = clean_review(review)
         tokens_list.append(tokens)
 
     # delete stop words
