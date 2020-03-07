@@ -34,12 +34,15 @@ class Reputation:
             x_axis.append(df.review_date[idx])
             y_axis.append(total_reputation / total_score)
 
+        plt.figure(dpi=80)
         plt.title("Product %d Reputation Tendency" %(product_parent))
         plt.xlabel("Time")
         plt.ylabel("Reputation")
+        a = list(range(len(x_axis)))
+        plt.xticks(a, rotation=90)
         plt.plot(x_axis, y_axis)
         plt.show()
 
 if __name__ == "__main__":
     r = Reputation()
-    r.draw(16483457)
+    r.draw(290876515)
