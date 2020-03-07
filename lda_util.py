@@ -14,7 +14,7 @@ ROOT_DIR = os.path.abspath("")
 MODEL_DIR = os.path.join(ROOT_DIR, "model")
 
 def clean_review(review):
-    review = review.replace("<br />", " ")
+    review = str(review).replace("<br />", " ")
     review = review.lower()
     tokens = nltk.word_tokenize(re.sub('[^\w ]', '', review))
     return tokens

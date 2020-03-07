@@ -93,9 +93,11 @@ class Score:
         self.raw_df.to_csv(path)
 
 if __name__ == "__main__":
-    s = Score()
+    path = "data/pacifier_score.tsv"
+    save_path = "scoreboard/pacifier_score.csv"
+    s = Score(path)
     s.calc_score()
-    s.save()
+    s.save(save_path)
 
    
 
