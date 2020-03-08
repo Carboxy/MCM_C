@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-from lda_util import clean_review
+import matplotlib.pyplot as plt
+from lda_util import clean_review, clean_tsv
 
 # REVISE ALL PARAMETERS HERE!
 
@@ -91,12 +92,45 @@ class Score:
     def save(self, path="scoreboard/hair_dryer_score.csv"):
         self.raw_df.to_csv(path)
 
+    def draw_tf_idf_distribution(self, path="tf_idf_value/hair_dryer_tf_idf_dict.csv", save_path="tf_idf_value/hair_dryer_tf_idf.csv"):
+        reviews = self.raw_df["review_body"].tolist()
+        reviews_list_cleaned = clean_tsv(reviews)
+
+        df = pd.read_csv(path)
+        # tf-idf: list of dict
+        tf_idf = df.to_dict(orient="records")
+
+        data = []
+
+        for reviews in reviews_list_cleaned:
+            total = 0
+            count = 0
+            result = 0
+            for review in reviews:
+                for item in tf_idf:
+                    if review == item["word"]:
+                        total += item["tf-idf"]
+                        count += 1
+                        break
+            if count != 0:
+                result = total / count
+            data.append(result)
+
+        self.raw_df["tf-idf"] = data
+        self.raw_df.to_csv(save_path)
+        
+        plt.title("TF-IDF Distribution")
+        plt.xlabel("AVG TF-IDF")
+        plt.ylabel("Number")
+        plt.hist(data, bins=100)
+        plt.show()
+
+
 if __name__ == "__main__":
     path = "data/pacifier_score.tsv"
     save_path = "scoreboard/pacifier_score.csv"
-    s = Score(path)
-    s.calc_score()
-    s.save(save_path)
+    s = Score()
+    s.draw_tf_idf_distribution()
 
    
 

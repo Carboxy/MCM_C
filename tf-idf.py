@@ -7,7 +7,7 @@ class TF_IDF:
     def __init__(self, path="data/hair_dryer.tsv"):
         self.raw_df = pd.read_csv(path, sep='\t', encoding='utf-8')
 
-    def get_tf_idf_dict(self, column_type="review_body", save_path="tf_idf_value/hair_dryer_tf_idf.csv"):
+    def get_tf_idf_dict(self, column_type="review_body", save_path="tf_idf_value/hair_dryer_tf_idf_dict.csv"):
         '''
             Get TF-IDF dictionary through all the review
             You can choose review headline to analyse either
@@ -58,7 +58,7 @@ class TF_IDF:
         df.to_csv(save_path, encoding='utf-8')
 
 
-    def get_tf_idf_dict_nltk(self, column_type="review_body", save_path="tf_idf_value/hair_dryer_tf_idf.csv"):
+    def get_tf_idf_dict_nltk(self, column_type="review_body", save_path="tf_idf_value/hair_dryer_tf_idf_dict.csv"):
         '''
             ### nltk version
             it's super slow so don't use it
@@ -66,9 +66,7 @@ class TF_IDF:
         reviews = self.raw_df[column_type].tolist()
 
         # get clean header
-        reviews_list_cleaned = []
-        for review in reviews:
-            reviews_list_cleaned.append(clean_review(review))
+        reviews_list_cleaned = clean_tsv(reviews)
 
         # get all words
         words = set()
@@ -90,5 +88,5 @@ class TF_IDF:
 
 if __name__ == "__main__":
     test = TF_IDF(path="data/pacifier_filtered.tsv")
-    test.get_tf_idf_dict(save_path="tf_idf_value/pacifier_filtered_tf_idf.csv")
+    test.get_tf_idf_dict(save_path="tf_idf_value/pacifier_filtered_tf_idf_dict.csv")
 

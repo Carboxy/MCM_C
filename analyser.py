@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
+from lda_util import clean_review
 
 class Analyser:
     def __init__(self, path="data/hair_dryer.tsv"):
@@ -134,6 +135,37 @@ class Analyser:
         df = df[df['helpful_votes'] >= 10]
         df.to_csv(save_path)
 
+    def high_quality_submatrix(self, save_path="ml_dataset/hair_dryer_high_quality.csv"):
+        df = pd.DataFrame({})
+        
+        for index, row in self.raw_df.iterrows():
+            if row["vine"] == "Y" or (row["total_votes"] >= 10 and row["helpful_votes"] / row["total_votes"] >= 0.7):
+                df = pd.concat([df, row], axis=1)
+
+        df.to_csv(save_path)
+
+    def low_quality_submatrix(self, count, save_path="ml_dataset/hair_dryer_low_quality.csv"):
+        df = pd.DataFrame({})
+        
+        counter = 0
+        for index, row in self.raw_df.iterrows():
+            if (row["total_votes"] >= 10 and row["helpful_votes"] / row["total_votes"] <= 0.3):
+                df = pd.concat([df, row], axis=1)
+                counter += 1
+            
+            if counter >= count / 2:
+                break
+
+        for index, row in self.raw_df.iterrows():
+            if len(clean_review(row["review_body"])) <= 20:
+                df = pd.concat([df, row], axis=1)
+                counter += 1
+            
+            if counter == count:
+                break
+
+        df.to_csv(save_path)
+
 if __name__ == "__main__":
-    ana = Analyser()
-    ana.filter_title()
+    ana = Analyser(path="data/microwave.tsv")
+    ana.low_quality_submatrix(count=185, save_path="ml_dataset/microwave_low_quality.csv")
