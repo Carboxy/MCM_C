@@ -47,4 +47,7 @@ $l \geq 20, value = 100$
 商品的总声誉(reputation)视为其下所有评论的加权和，
 其中权值为以上过程中得出的score，而单条评论得出的声誉由其打分以及评论内容构成
 $total\_reputation = \sum^n_{i=1}score_i \times reputation_i$
-我先在未得到文本对单独声誉的影响下只用rate的星值尝试计算时间随总声誉的变化情况
+现考虑如何计算单条评论得到的声誉
+
+其中可利用信息为star_rating以及review_score
+review_score从评论提取出反应该条评论的态度如何，范围从0取至100

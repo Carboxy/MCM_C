@@ -30,7 +30,7 @@ class Reputation:
         for idx in reversed(df.index):
             score = float(df.score[idx])
             total_score += score
-            total_reputation += (self._star2score(df.star_rating[idx]) + float(df.review_score[idx])) / 2 * score
+            total_reputation += (df.star_rating[idx] + float(df.review_score[idx])) / 2 * score
             x_axis.append(df.review_date[idx])
             y_axis.append(total_reputation / total_score)
 
@@ -46,4 +46,4 @@ class Reputation:
 
 if __name__ == "__main__":
     r = Reputation()
-    r.draw(593915883)
+    r.draw(983445543)

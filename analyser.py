@@ -107,7 +107,7 @@ class Analyser:
         plt.title("Score Distribution")
         plt.xlabel("Score")
         plt.ylabel("Number")
-        plt.hist(scores, bins=10)
+        plt.hist(scores, bins=100)
         plt.show()
 
     def generate_word_cloud(self, product_parent=0):
@@ -168,4 +168,4 @@ class Analyser:
 
 if __name__ == "__main__":
     ana = Analyser(path="data/microwave.tsv")
-    ana.low_quality_submatrix(count=185, save_path="ml_dataset/microwave_low_quality.csv")
+    ana.score_distribution(path="scoreboard/microwave_score.csv")

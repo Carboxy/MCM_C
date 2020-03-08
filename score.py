@@ -16,24 +16,24 @@ HVR_PARA_1 = 20
 VINE_BASE = 80
 VINE_PARA = 0.2
 
-# $l \in N^+$
-# $l \leq BODY_THRES_1, value = BODY_PARA_1 \times l$
-# $BODY_THRES_1 < l < BODY_THRES_2, value = BODY_PARA_2 \times l - BODY_PARA_3$
-# $l \geq BODY_THRES_2, value = 100$
-BODY_THRES_1 = 10
-BODY_PARA_1 = 0.5
-BODY_THRES_2 = 20
-BODY_PARA_2 = 10
-BODY_PARA_3 = 100
+# # $l \in N^+$
+# # $l \leq BODY_THRES_1, value = BODY_PARA_1 \times l$
+# # $BODY_THRES_1 < l < BODY_THRES_2, value = BODY_PARA_2 \times l - BODY_PARA_3$
+# # $l \geq BODY_THRES_2, value = 100$
+# BODY_THRES_1 = 10
+# BODY_PARA_1 = 0.5
+# BODY_THRES_2 = 20
+# BODY_PARA_2 = 10
+# BODY_PARA_3 = 100
 
 DEFAULT_HEADER_PARA = 0.1
 VERIFIED_PURCHASE_PARA = 0.5
 
 
 class Score:
-    def __init__(self, path="data/hair_dryer.tsv"):
+    def __init__(self, path="ml_dataset/hair_dryer_predict.csv"):
         # read raw data
-        self.raw_df = pd.read_csv(path, sep='\t')
+        self.raw_df = pd.read_csv(path)
 
     def _cal_helpful_review_ratio_value(self, row):
         '''
@@ -53,15 +53,16 @@ class Score:
         '''
             turn length of review_body into value [0, 100]
         '''
-        text = row["review_body"]
-        word_list = clean_review(text)
-        l = len(word_list)
-        if l <= BODY_THRES_1:
-            return BODY_PARA_1 * l
-        elif l < BODY_THRES_2:
-            return BODY_PARA_2 * l - BODY_PARA_3
-        else:
-            return 100
+        # text = row["review_body"]
+        # word_list = clean_review(text)
+        # l = len(word_list)
+        # if l <= BODY_THRES_1:
+        #     return BODY_PARA_1 * l
+        # elif l < BODY_THRES_2:
+        #     return BODY_PARA_2 * l - BODY_PARA_3
+        # else:
+        #     return 100
+        return row["predict"]
 
     def _is_default_header(self, row):
         header = row["review_headline"]
@@ -84,7 +85,7 @@ class Score:
                     para *= DEFAULT_HEADER_PARA
                 if row["verified_purchase"] == "N":
                     para *= VERIFIED_PURCHASE_PARA
-                score = self._cal_helpful_review_ratio_value(row) * para * self._cal_review_body_value(row) / 100
+                score = self._cal_helpful_review_ratio_value(row) * para * self._cal_review_body_value(row)
             scores.append(score)
 
         self.raw_df["score"] = scores
@@ -127,10 +128,11 @@ class Score:
 
 
 if __name__ == "__main__":
-    path = "data/pacifier_score.tsv"
-    save_path = "scoreboard/pacifier_score.csv"
-    s = Score()
-    s.draw_tf_idf_distribution()
+    path = "ml_dataset/pacifier_filtered_predict.csv"
+    save_path = "scoreboard/pacifier_filtered_score.csv"
+    s = Score(path)
+    s.calc_score()
+    s.save(save_path)
 
    
 
