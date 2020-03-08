@@ -20,12 +20,9 @@ def clean_review(review):
     return tokens
 
 
-def clean_tsv(path):
+def clean_tsv(reviews):
     print('Cleaning...')
-    # load reviews
-    df = pd.read_csv("data/hair_dryer.tsv", sep='\t', encoding="utf-8")
-    reviews = df["review_body"].tolist()
-
+    
     # tokenize
     tokens_list = []
 
@@ -49,10 +46,13 @@ def clean_tsv(path):
         texts = [p_stemmer.stem(stopped_token) for stopped_token in stopped_tokens]
         texts_list.append(texts)
 
+    print('End Cleaning...')
+
     return texts_list
 
 if __name__ == "__main__":
-    texts_list = clean_tsv("data/hair_dryer.tsv")
+    df = pd.read_csv("data/hair_dryer.tsv", sep='\t')
+    texts_list = clean_tsv(df["review_body"].tolist())
 
     dictionary = corpora.Dictionary(texts_list)
     corpus = [dictionary.doc2bow(texts) for texts in texts_list]

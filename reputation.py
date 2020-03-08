@@ -42,6 +42,7 @@ class Reputation:
         plt.xticks(a, rotation=90)
         plt.plot(x_axis, y_axis)
         plt.show()
+        
 
 if __name__ == "__main__":
     r = Reputation()

@@ -136,4 +136,4 @@ class Analyser:
 
 if __name__ == "__main__":
     ana = Analyser()
-    ana.generate_high_helpful_vote_submatrix("scoreboard/pacifier_score.csv", "meaningful_review/pacifier_meaningful_review.csv")
+    ana.filter_title()
