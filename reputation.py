@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from scipy.interpolate import make_interp_spline
 
 class Reputation:
     def __init__(self, path="scoreboard/hair_dryer_score.csv"):
@@ -13,7 +14,7 @@ class Reputation:
         '''
         return 20 * star
 
-    def draw(self, product_parent):
+    def draw_total_reputation_tendency(self, product_parent):
         '''
             By given product, analyse the relation between time and
             total reputation, and draw the graph in the end
@@ -40,10 +41,47 @@ class Reputation:
         plt.ylabel("Reputation")
         a = list(range(len(x_axis)))
         plt.xticks(a, rotation=90)
-        plt.plot(x_axis, y_axis)
+        plt.plot(x_axis, y_axis, color="b")
+        
+
+        plt.show()
+
+    def draw_reputation_tendency_flex_version(self, product_parent, step):
+        df = self.raw_df.groupby("product_parent").get_group(product_parent)
+
+        scores = []
+        single_reputation = []
+        time = []
+
+        for idx in reversed(df.index):
+            score = float(df.score[idx])
+            scores.append(score)
+            single_reputation.append((df.star_rating[idx] + float(df.review_score[idx])) / 2 * score)
+            time.append(df.review_date[idx])
+
+        for _ in range(int(step / 2)):
+            time.pop(-1)
+
+        for _ in range(int((step - 1) / 2)):
+            time.pop(-1)
+
+        y_axis = []
+
+        for idx in range(len(single_reputation) - (step - 1)):
+            y_axis.append(sum(single_reputation[idx:idx+step]) / sum(scores[idx:idx+step]))
+        
+
+        plt.figure(dpi=80)
+        plt.title("Product %d Reputation Tendency (Flexible Version) (step = %d)" %(product_parent, step))
+        plt.xlabel("Time")
+        plt.ylabel("Reputation")
+        a = list(range(len(time)))
+        plt.xticks(a, rotation=90)
+        plt.plot(time, y_axis, color="green")
+
         plt.show()
         
 
 if __name__ == "__main__":
     r = Reputation()
-    r.draw(983445543)
+    r.draw_reputation_tendency_flex_version(983445543, 50)
