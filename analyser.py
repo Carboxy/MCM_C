@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from lda_util import clean_review
+import seaborn as sns
 
 class Analyser:
     def __init__(self, path="data/hair_dryer.tsv"):
@@ -96,18 +97,20 @@ class Analyser:
         plt.hist(data, bins=40)
         plt.show()
 
-    def score_distribution(self, path="scoreboard/hair_dryer_score.csv"):
+    def score_distribution(self, product="hair_dryer"):
         '''
             ### Draw the picture of score distribution of given score file
         '''
-
+        path = "scoreboard/" + product + "_score.csv"
         df = pd.read_csv(path)
         scores = df["score"].tolist()
 
-        plt.title("Score Distribution")
-        plt.xlabel("Score")
-        plt.ylabel("Number")
-        plt.hist(scores, bins=100)
+        sns.set_style("whitegrid")
+        plt.xlabel("Contribution Value")
+        plt.ylabel("Density")
+        # plt.hist(scores, bins=100, color="g")
+        sns.kdeplot(scores, shade=True, color="b")
+        plt.xlim(0, 100)
         plt.show()
 
     def generate_word_cloud(self, product_parent=0):
@@ -168,4 +171,4 @@ class Analyser:
 
 if __name__ == "__main__":
     ana = Analyser(path="data/microwave.tsv")
-    ana.score_distribution(path="scoreboard/microwave_score.csv")
+    ana.score_distribution(product="pacifier_filtered")
